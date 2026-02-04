@@ -1,0 +1,17 @@
+{
+    "name": "@workspace/common",
+    "version": "0.0.1",
+    "type": "module",
+    "prettier": "@tooling/prettier/config",
+    "devDependencies": {
+        "@tooling/eslint": "workspace:*",
+        "@tooling/madge": "workspace:*",
+        "@tooling/prettier": "workspace:*",
+        "@tooling/typescript": "workspace:*"
+    },
+    "scripts": {
+        "cir-dep": "check-cir-deps .",
+        "format": "prettier-format",
+        "lint": "eslint-lint --config eslint.config.mjs './**/*.ts'"
+    }
+}

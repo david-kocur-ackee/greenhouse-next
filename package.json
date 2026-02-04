@@ -1,0 +1,34 @@
+{
+    "name": "nextjs-monorepo-template",
+    "packageManager": "yarn@4.9.1+sha256.6ffc213b3ce0af5c92507977d9537ea3cc085caa52d1c3f08e94d613407fed19",
+    "private": true,
+    "type": "module",
+    "engines": {
+        "node": ">=22"
+    },
+    "scripts": {
+        "postinstall": "turbo telemetry disable",
+        "build": "turbo run build --parallel",
+        "dev": "turbo run dev --concurrency 100%",
+        "cir-dep": "turbo run cir-dep --parallel",
+        "test:ci": "turbo run test:ci --parallel",
+        "lint": "turbo run lint --parallel",
+        "lint:fix": "turbo run lint --parallel -- --fix",
+        "format": "turbo run format --parallel",
+        "audit": "yarn npm audit --severity moderate --environment production --all",
+        "pre-commit": "prettier-format --staged --log-level=log && turbo run lint --parallel --force -- --staged --fix"
+    },
+    "workspaces": [
+        "apps/*",
+        "packages/*",
+        "tooling/*"
+    ],
+    "dependencies": {
+        "@tooling/eslint": "workspace:*",
+        "@tooling/prettier": "workspace:*",
+        "@tooling/typescript": "workspace:*",
+        "husky": "^9.1.7",
+        "turbo": "^2.5.3"
+    },
+    "prettier": "@tooling/prettier/config"
+}

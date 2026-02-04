@@ -1,0 +1,25 @@
+{
+    "name": "@workspace/logger",
+    "version": "0.0.1",
+    "type": "module",
+    "peerDependencies": {
+        "next": "16.x",
+        "react": "19.x"
+    },
+    "dependencies": {
+        "@sentry/browser": "^10.38.0",
+        "@sentry/nextjs": "^10.38.0",
+        "loglevel": "^1.9.2",
+        "react": "^19.1.0"
+    },
+    "devDependencies": {
+        "@tooling/eslint": "workspace:*",
+        "@tooling/prettier": "workspace:*",
+        "@tooling/typescript": "workspace:*"
+    },
+    "prettier": "@tooling/prettier/config",
+    "scripts": {
+        "format": "prettier-format --write ./*.ts",
+        "lint": "eslint-lint --config eslint.config.js './**/*.ts'"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "@workspace/errors",
+    "version": "0.0.1",
+    "type": "module",
+    "peerDependencies": {
+        "@sentry/nextjs": "10.x"
+    },
+    "devDependencies": {
+        "@sentry/nextjs": "^10.38.0",
+        "@tooling/eslint": "workspace:*",
+        "@tooling/madge": "workspace:*",
+        "@tooling/prettier": "workspace:*",
+        "@tooling/typescript": "workspace:*"
+    },
+    "prettier": "@tooling/prettier/config",
+    "scripts": {
+        "cir-dep": "check-cir-deps .",
+        "format": "prettier-format",
+        "lint": "eslint-lint --config eslint.config.mjs './**/*.{ts,tsx}'"
+    },
+    "dependencies": {
+        "next": "^16.1.6",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0"
+    }
+}
