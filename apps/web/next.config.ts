@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import path from 'path';
 import { withSentryConfig } from '@sentry/nextjs';
 import { config } from 'dotenv';
 import type { dependencies } from 'package.json';
+import path from 'path';
 
 import { defaultLocale, locales } from '@workspace/localization';
 
@@ -32,6 +32,13 @@ const nextConfig: NextConfig = {
     poweredByHeader: false,
     
     reactCompiler: true,
+
+    rewrites: async () => [
+        {
+            source: '/api/:path*',
+            destination: `${process.env.NEXT_PUBLIC_API_BASE_URL}/:path*`,
+        },
+    ],
 
     headers: async () => [
         {

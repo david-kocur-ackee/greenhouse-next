@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+@theme {
+    --color-dark: #202329;
+    --color-dark-light: #393e49;
+    --color-neon: #bffa00;
+    --color-accent: #e6f5fb;
+    --color-accent-dark: #b0d7e7;
+    --font-sans: 'Sora', sans-serif;
+    --font-sora: 'Sora', sans-serif;
+}

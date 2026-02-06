@@ -24,11 +24,25 @@
         "tooling/*"
     ],
     "dependencies": {
+        "@headlessui/react": "2.2.9",
+        "@mui/base": "5.0.0-beta.70",
+        "@tailwindcss/postcss": "^4.1.0",
         "@tooling/eslint": "workspace:*",
         "@tooling/prettier": "workspace:*",
         "@tooling/typescript": "workspace:*",
+        "@types/luxon": "3.7.1",
+        "apexcharts": "5.3.6",
         "husky": "^9.1.7",
+        "luxon": "3.7.2",
+        "postcss": "^8.5.4",
+        "react-apexcharts": "1.9.0",
+        "react-icons": "5.5.0",
+        "react-toastify": "11.0.5",
+        "tailwindcss": "^4.1.0",
         "turbo": "^2.5.3"
     },
-    "prettier": "@tooling/prettier/config"
+    "prettier": "@tooling/prettier/config",
+    "devDependencies": {
+        "@mocks-server/main": "4.1.0"
+    }
 }

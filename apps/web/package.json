@@ -39,6 +39,7 @@
         "zod": "3.25.23"
     },
     "devDependencies": {
+        "@tailwindcss/postcss": "^4.1.0",
         "@tooling/eslint": "workspace:*",
         "@tooling/madge": "workspace:*",
         "@tooling/prettier": "workspace:*",
@@ -48,6 +49,8 @@
         "browserslist-config-ackee": "workspace:*",
         "dotenv": "16.5.0",
         "gitmoji-changelog": "^2.3.0",
+        "postcss": "^8.5.4",
+        "tailwindcss": "^4.1.0",
         "type-fest": "^4.41.0",
         "typescript": "^5.8.3",
         "vitest": "^3.1.4"
