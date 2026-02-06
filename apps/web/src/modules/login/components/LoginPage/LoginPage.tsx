@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import { FaCarrot } from 'react-icons/fa';
 
 import { routes } from '~constants/routes';
-import SessionHandler from '~utils/sessionHandler';
+
+import useLogin from './hooks/useLogin';
 
 export default function Login() {
-    const API_URL = '/api';
     const router = useRouter();
 
     const [formData, setFormData] = useState({ email: '', password: '' });
+
+    const { mutate: login } = useLogin();
 
     const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
         const { name, value } = event.currentTarget;
@@ -21,13 +22,7 @@ export default function Login() {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         try {
-            const response = await axios.post(API_URL + '/login', {
-                ...formData,
-            });
-
-            const { token } = response.data;
-
-            SessionHandler.login(token);
+            login(formData);
             router.push(routes.home);
         } catch (error) {
             alert('Login failed: ' + error);
@@ -48,7 +43,7 @@ export default function Login() {
             </div>
 
             <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
-                <form onSubmit={handleSubmit} className='space-y-6' action={API_URL + '/login'} method='POST'>
+                <form onSubmit={handleSubmit} className='space-y-6' method='POST'>
                     <div>
                         <label htmlFor='email' className='block text-sm font-medium leading-6'>
                             Email address
