@@ -1,68 +1,68 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DateTime, Duration } from 'luxon';
 import { BsWater } from 'react-icons/bs';
 import { WiThermometer } from 'react-icons/wi';
-import Measurement from 'src/domain/Measurement';
-import Preset from 'src/domain/Preset';
 
-import { useGet } from '~hooks/useGet';
 import CurrentValBox from '~modules/home/components/CurrentValBox/CurrentValBox';
 import LineChart from '~modules/home/components/LineChart/LineChart';
 import PresetStatus from '~modules/home/components/PresetStatus/PresetStatus';
 import WateringStatus from '~modules/home/components/WateringStatus/WateringStatus';
 import { displayNetworkError } from '~utils/errorToast';
 
-const API_URL = '/api';
+import useGetCo2Measurements from './hooks/useGetCo2Measurements';
+import useGetCurrentCo2 from './hooks/useGetCurrentCo2';
+import useGetCurrentHumidity from './hooks/useGetCurrentHumidity';
+import useGetCurrentTemperature from './hooks/useGetCurrentTemperature';
+import useGetHumidityMeasurements from './hooks/useGetHumidityMeasurements';
+import useGetPresetResponse from './hooks/useGetPresetResponse';
+import useGetTemparatureMeasurements from './hooks/useGetTemparatureMeasurements';
+import useGetToggleResponse from './hooks/useGetToggleResponse';
 
 export default function HomePage() {
-    const co2ChartResponse = useGet<Measurement[]>(`${API_URL}/measurements/co2`);
+    const { data: co2Measurements, error: co2Error } = useGetCo2Measurements();
+    const { data: humidityMeasurements, error: humidityError } = useGetHumidityMeasurements();
+    const { data: temperatureMeasurements, error: temperatureError } = useGetTemparatureMeasurements();
+    const { data: presetResponse, error: presetError } = useGetPresetResponse();
+    const { data: toggleResponse, error: toggleError } = useGetToggleResponse();
 
-    const humidityChartResponse = useGet<Measurement[]>(`${API_URL}/measurements/humidity`);
+    const { data: currentCo2, error: co2CurrentError } = useGetCurrentCo2();
+    const { data: currentHumidity, error: humidityCurrentError } = useGetCurrentHumidity();
+    const { data: currentTemperature, error: temperatureCurrentError } = useGetCurrentTemperature();
 
-    const temperatureChartResponse = useGet<Measurement[]>(`${API_URL}/measurements/temperature`);
+    const error = [
+        co2Error,
+        humidityError,
+        temperatureError,
+        toggleError,
+        presetError,
+        co2CurrentError,
+        humidityCurrentError,
+        temperatureCurrentError,
+    ].find(Boolean);
 
-    const getToggleResponse = useGet<{ state: boolean }>(`${API_URL}/watering-system/toggle`);
-
-    if (getToggleResponse.error != null) {
-        displayNetworkError(getToggleResponse.error.message);
+    if (error) {
+        displayNetworkError(error.message ?? 'Unknown error');
     }
-    if (co2ChartResponse.error != null) {
-        displayNetworkError(co2ChartResponse.error.message);
-    }
-    if (humidityChartResponse.error != null) {
-        displayNetworkError(humidityChartResponse.error.message);
-    }
-    if (temperatureChartResponse.error != null) {
-        displayNetworkError(temperatureChartResponse.error.message);
-    }
-    const presetResponse = useGet<Preset>(`${API_URL}/current-preset`);
 
-    const co2Thresholds = presetResponse.data?.thresholds?.find(({ type }) => type === 'co2');
+    const co2Thresholds = useMemo(
+        () => presetResponse?.thresholds?.find(({ type }) => type === 'co2'),
+        [presetResponse],
+    );
 
-    const humidityThresholds = presetResponse.data?.thresholds.find(({ type }) => type === 'humidity');
+    const humidityThresholds = useMemo(
+        () => presetResponse?.thresholds?.find(({ type }) => type === 'humidity'),
+        [presetResponse],
+    );
 
-    const temperatureThresholds = presetResponse.data?.thresholds.find(({ type }) => type === 'temperature');
+    const temperatureThresholds = useMemo(
+        () => presetResponse?.thresholds?.find(({ type }) => type === 'temperature'),
+        [presetResponse],
+    );
 
     const [temperature, setTemperature] = useState<number | null>(null);
     const [humidity, setHumidity] = useState<number | null>(null);
     const [co2, setCo2] = useState<number | null>(null);
     const [date, setDate] = useState<number | null>(null);
-
-    const co2Response = useGet<Measurement[]>(`${API_URL}/measurements/co2?current=true`);
-
-    const humidityResponse = useGet<Measurement[]>(`${API_URL}/measurements/humidity?current=true`);
-
-    const temperatureResponse = useGet<Measurement[]>(`${API_URL}/measurements/temperature?current=true`);
-
-    if (co2Response.error != null) {
-        displayNetworkError(co2Response.error.message);
-    }
-    if (humidityResponse.error != null) {
-        displayNetworkError(humidityResponse.error.message);
-    }
-    if (temperatureResponse.error != null) {
-        displayNetworkError(temperatureResponse.error.message);
-    }
 
     const [timeToWatering, setTimeToWatering] = useState<Duration | null>(null);
 
@@ -79,23 +79,17 @@ export default function HomePage() {
     }, []);
 
     useEffect(() => {
-        let mounted = true;
-
-        if (mounted && temperatureResponse.data != null) {
-            setTemperature(temperatureResponse.data[0].value);
+        if (currentTemperature) {
+            setTemperature(currentTemperature[0].value);
         }
-        if (mounted && co2Response.data != null) {
-            setCo2(co2Response.data[0].value);
-            setDate(co2Response.data[0].timestamp);
+        if (currentCo2) {
+            setCo2(currentCo2[0].value);
+            setDate(currentCo2[0].timestamp);
         }
-        if (mounted && humidityResponse.data != null) {
-            setHumidity(humidityResponse.data[0].value);
+        if (currentHumidity) {
+            setHumidity(currentHumidity[0].value);
         }
-
-        return () => {
-            mounted = false;
-        };
-    }, [co2Response, humidityResponse, temperatureResponse]);
+    }, [currentCo2, currentHumidity, currentTemperature]);
 
     return (
         <div className='grid m-3 grid-cols-1 lg:grid-cols-5 gap-5'>
@@ -108,15 +102,15 @@ export default function HomePage() {
                     co2={co2?.toString() ?? ''}
                 />
                 <WateringStatus
-                    isOnline={getToggleResponse.data?.state ?? false}
+                    isOnline={toggleResponse?.state ?? false}
                     timeToWatering={timeToWatering ?? Duration.fromObject({ hours: 0, minutes: 0, seconds: 0 })}
                 />
-                <PresetStatus preset={presetResponse.data} />
+                <PresetStatus preset={presetResponse} />
             </div>
 
             <div className='lg:col-span-3 flex flex-col gap-5'>
                 <LineChart
-                    measurements={co2ChartResponse.data}
+                    measurements={co2Measurements}
                     type='co2'
                     bgColor='#ffefde'
                     accentColor='#FFDCB6'
@@ -130,7 +124,7 @@ export default function HomePage() {
                 />
 
                 <LineChart
-                    measurements={temperatureChartResponse.data}
+                    measurements={temperatureMeasurements}
                     type='temperature'
                     bgColor='#feffde'
                     accentColor='#f4f5bd'
@@ -140,7 +134,7 @@ export default function HomePage() {
                 />
 
                 <LineChart
-                    measurements={humidityChartResponse.data}
+                    measurements={humidityMeasurements}
                     type='humidity'
                     bgColor='#e6f5fb'
                     accentColor='#b0d7e7'

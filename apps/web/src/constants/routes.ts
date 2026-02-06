@@ -1,8 +1,8 @@
 import type { ValuesOf } from '@workspace/common/types';
 
 export const routes = {
-    login: '/login',
-    home: '/',
+    login: '/',
+    home: '/home',
 } as const satisfies Record<string, string>;
 
 export type Route = ValuesOf<typeof routes>;
