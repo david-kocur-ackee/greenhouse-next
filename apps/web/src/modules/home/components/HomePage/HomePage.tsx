@@ -18,7 +18,7 @@ import useGetPresetResponse from './hooks/useGetPresetResponse';
 import useGetTemparatureMeasurements from './hooks/useGetTemparatureMeasurements';
 import useGetToggleResponse from './hooks/useGetToggleResponse';
 
-export default function HomePage() {
+export default function HomePage({}) {
     const { data: co2Measurements, error: co2Error } = useGetCo2Measurements();
     const { data: humidityMeasurements, error: humidityError } = useGetHumidityMeasurements();
     const { data: temperatureMeasurements, error: temperatureError } = useGetTemparatureMeasurements();
