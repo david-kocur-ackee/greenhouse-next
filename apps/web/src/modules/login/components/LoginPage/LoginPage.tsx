@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { FaCarrot } from 'react-icons/fa';
 
 import { routes } from '~constants/routes';
+import { LoginFormSchema, type LoginFormSchemaType } from '~modules/form/hooks/LoginFormSchema';
 
 import useLogin from './hooks/useLogin';
 
@@ -13,20 +16,27 @@ export default function Login() {
 
     const { mutate: login } = useLogin();
 
-    const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-        const { name, value } = event.currentTarget;
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<LoginFormSchemaType>({
+        resolver: zodResolver(LoginFormSchema),
+    });
 
-        setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
-    };
+    // const handleSubmit = async (event: React.FormEvent) => {
+    //     event.preventDefault();
+    //     try {
+    //         login(formData);
+    //         router.push(routes.home);
+    //     } catch (error) {
+    //         alert('Login failed: ' + error);
+    //     }
+    // };
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        try {
-            login(formData);
-            router.push(routes.home);
-        } catch (error) {
-            alert('Login failed: ' + error);
-        }
+    const onSubmit: SubmitHandler<LoginFormSchemaType> = data => {
+        login(data);
+        router.push(routes.home);
     };
 
     return (
@@ -43,7 +53,7 @@ export default function Login() {
             </div>
 
             <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
-                <form onSubmit={handleSubmit} className='space-y-6' method='POST'>
+                <form onSubmit={handleSubmit(onSubmit)} className='space-y-6' method='POST'>
                     <div>
                         <label htmlFor='email' className='block text-sm font-medium leading-6'>
                             Email address
@@ -51,14 +61,12 @@ export default function Login() {
                         <div className='mt-2'>
                             <input
                                 id='email'
-                                name='email'
-                                type='email'
+                                {...register('email')}
                                 autoComplete='email'
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
                                 className='block pl-3 w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-neon sm:text-sm sm:leading-6'
                             />
+
+                            {errors.email && <p className='text-red-500'>{errors.email.message}</p>}
                         </div>
                     </div>
                     <div>
@@ -70,14 +78,11 @@ export default function Login() {
                         <div className='mt-2'>
                             <input
                                 id='password'
-                                name='password'
-                                type='password'
+                                {...register('password')}
                                 autoComplete='current-password'
-                                value={formData.password}
-                                onChange={handleChange}
-                                required
                                 className='block pl-3 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-neon sm:text-sm sm:leading-6'
                             />
+                            {errors.password && <p className='text-red-500'>{errors.password.message}</p>}
                         </div>
                     </div>
 
