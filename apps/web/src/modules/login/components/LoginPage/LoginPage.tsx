@@ -12,27 +12,15 @@ import useLogin from './hooks/useLogin';
 export default function Login() {
     const router = useRouter();
 
-    const [formData, setFormData] = useState({ email: '', password: '' });
-
     const { mutate: login } = useLogin();
 
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<LoginFormSchemaType>({
         resolver: zodResolver(LoginFormSchema),
     });
-
-    // const handleSubmit = async (event: React.FormEvent) => {
-    //     event.preventDefault();
-    //     try {
-    //         login(formData);
-    //         router.push(routes.home);
-    //     } catch (error) {
-    //         alert('Login failed: ' + error);
-    //     }
-    // };
 
     const onSubmit: SubmitHandler<LoginFormSchemaType> = data => {
         login(data);
@@ -90,6 +78,7 @@ export default function Login() {
                         <button
                             type='submit'
                             className='p-2 w-full h-full rounded-lg bg-dark text-white hover:bg-dark-light duration-100 grid items-center'
+                            disabled={isSubmitting}
                         >
                             Sign in
                         </button>
