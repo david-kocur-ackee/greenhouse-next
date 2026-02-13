@@ -2,9 +2,8 @@ import Link from 'next/link';
 import { Duration } from 'luxon';
 import { AiOutlineCalendar } from 'react-icons/ai';
 
+import RectIcon from '~modules/UI/RectIcon/RectIcon';
 import durationToString from '~utils/durationToString';
-
-import RectIcon from '../../../UI/RectIcon';
 
 interface WateringStatusProps {
     isOnline: boolean;

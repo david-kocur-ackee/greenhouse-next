@@ -25,3 +25,6 @@ export const fetchPreset = () =>
 
 export const fetchToggle = () =>
     fetch(`${API_BASE}/watering-system/toggle`).then(res => res.json());
+
+export const fetchSchedule = () =>
+    fetch(`${API_BASE}/schedule`).then(res => res.json());

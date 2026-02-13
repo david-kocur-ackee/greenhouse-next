@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, type SubmitHandler } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
 import { FaCarrot } from 'react-icons/fa';
 
 import { routes } from '~constants/routes';
-import { LoginFormSchema, type LoginFormSchemaType } from '~modules/form/hooks/LoginFormSchema';
+import type { LoginFormSchemaType } from '~modules/form/hooks/LoginFormSchema';
 
 import LoginForm from '../LoginForm/LoginForm';
 import useLogin from './hooks/useLogin';

@@ -4,10 +4,10 @@ import { DateTime, Duration } from 'luxon';
 import Measurement from 'src/domain/Measurement';
 import TimeScope from 'src/domain/TimeScope';
 
+import ChartIcon from '~modules/UI/RectIcon/RectIcon';
 import { averageMeasurements } from '~utils/averageMeasurements';
 import capitalize from '~utils/capitalize';
 
-import ChartIcon from '../../../UI/RectIcon';
 import Dropdown from '../DropDown/DropDown';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
