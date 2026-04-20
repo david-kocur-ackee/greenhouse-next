@@ -16,7 +16,9 @@
         "lint:fix": "turbo run lint --parallel -- --fix",
         "format": "turbo run format --parallel",
         "audit": "yarn npm audit --severity moderate --environment production --all",
-        "pre-commit": "prettier-format --staged --log-level=log && turbo run lint --parallel --force -- --staged --fix"
+        "mocks": "mocks-server",
+    "mocks:ci": "mocks-server --no-watch",
+    "pre-commit": "prettier-format --staged --log-level=log && turbo run lint --parallel --force -- --staged --fix"
     },
     "workspaces": [
         "apps/*",

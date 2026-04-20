@@ -1,0 +1,42 @@
+[
+  {
+    "id": "default",
+    "routes": [
+      "get-measurements-temperature:success",
+      "get-measurements-co2:success",
+      "get-measurements-humidity:success",
+      "get-current-preset:success",
+      "get-watering-toggle:success",
+      "post-watering-toggle:success",
+      "get-schedule:success",
+      "post-schedule:success",
+      "put-schedule:success",
+      "delete-schedule:success",
+      "post-login:success"
+    ]
+  },
+  {
+    "id": "error-state",
+    "from": "default",
+    "routes": [
+      "get-measurements-temperature:error",
+      "get-measurements-co2:error",
+      "get-measurements-humidity:error",
+      "post-login:invalid-credentials"
+    ]
+  },
+  {
+    "id": "no-schedule",
+    "from": "default",
+    "routes": [
+      "get-schedule:empty"
+    ]
+  },
+  {
+    "id": "watering-on",
+    "from": "default",
+    "routes": [
+      "get-watering-toggle:on"
+    ]
+  }
+]

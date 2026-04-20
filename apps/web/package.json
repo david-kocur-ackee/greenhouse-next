@@ -4,6 +4,7 @@
     "scripts": {
         "types-check": "tsc --noEmit -w",
         "dev": "next dev",
+        "dev:mocks": "NEXT_PUBLIC_API_BASE_URL=http://localhost:3100 next dev",
         "build": "next build",
         "start": "next start",
         "lint": "eslint-lint --config=eslint.config.mjs './src/**/*.{ts,tsx}'",
